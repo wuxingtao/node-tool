@@ -1,4 +1,6 @@
 ## 功能清单
+- [x] cd-multiple.js 禅道任务开始自动化
+- [x] cd-multiple-end.js 禅道结束自动化
 - [x] cd-index.js 禅道自动化
 - [ ] lj-index.js 蓝鲸自动化
 
