@@ -4,6 +4,7 @@
  * @Date: 2023/1/5
  */
 const puppeteer = require('puppeteer');
+const dayjs = require('dayjs')
 const help = require('./utils/help.js');
 
 (async () => {
@@ -46,11 +47,11 @@ const help = require('./utils/help.js');
   }
   await page.waitForNavigation();
 
-  const today = help.getToDay()
+  const today = dayjs(help.getToDay()).format("MM-DD")
 
   async function todayTaskCheck () {
     // 今日任务列表
-    const elementLists = await page.$x(`//td[contains(text(),"${today}")]`);
+    const elementLists = await page.$x(`//td[@class='c-deadline'][contains(text(),"${today}")]`);
     let taskLists = elementLists.length // 剩余任务数
     // const [targetElement] = await page.$x('//div[contains(@class, "group") and contains(., "1st Goal")]/div[@class="parent2"]//span[@class="odds"]')
     console.log(today, elementLists.length)
@@ -58,11 +59,24 @@ const help = require('./utils/help.js');
       for (let i = 0; i < elementLists.length; i++) {
         // const parentElement = await page.evaluate(el => el.parentNode, elementLists[i]);
         const parentNode = await elementLists[i].getProperty('parentNode')
+        const parentClassHandle =await (await parentNode.getProperty('className')).jsonValue()
+
         console.log('parentNode', parentNode)
-        const btnElements = await parentNode.$('a[title="完成"]')
+        console.log('parentClassHandle', parentClassHandle)
+
+        // 获取属性attr
+        const attr = await page.evaluate(el => el.getAttribute("data-id"), parentNode);
+        console.log('data-id',attr)
+
+        const btnTrElements = await page.$(`.fixed-right table tr[data-id="${attr}"]`)
+        const btnElements = await btnTrElements.$('a[title="完成"]')
         console.log('btnElements', btnElements)
         if (btnElements) {
-          btnElements.click()
+          try{
+            await btnElements.click()
+          }catch (e) {
+            console.log('错误信息', e)
+          }
           // iframe
           setTimeout(async () => {
             await page.waitForSelector('iframe');
@@ -70,6 +84,10 @@ const help = require('./utils/help.js');
             // const elementHandle = await page.$('iframe[src="https://example.com"]',);
             const elementHandle = await page.$('#iframe-triggerModal')
             console.log('iframe element', elementHandle)
+            if(!elementHandle){
+              console.log('iframe modal error')
+              return
+            }
             const frame = await elementHandle.contentFrame();
 
             frame.click('#submit')
@@ -83,12 +101,12 @@ const help = require('./utils/help.js');
           taskLists -= 1
         }
       }
-      // 剩余任务数为0
-      if(taskLists <= 0){
-        setTimeout(async () => {
-          await browser.close();
-        },1000)
-      }
+      // // 剩余任务数为0
+      // if(taskLists <= 0){
+      //   setTimeout(async () => {
+      //     await browser.close();
+      //   },1000)
+      // }
     }
   }
 
