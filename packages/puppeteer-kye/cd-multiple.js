@@ -31,7 +31,8 @@ const titleValue = typeLists[type] && typeLists[type].title;
       '--disable-features=IsolateOrigins,site-per-process']
   })
   const page = await browser.newPage()
-  await page.goto('http://zentao.ky-tech.com.cn/user-login.html')
+  // await page.goto('http://zentao.ky-tech.com.cn/user-login.html')
+  await page.goto('https://zentao.ky-tech.com.cn/user-login-L215Lmh0bWw=.html')
   console.log('start!', page.url())
 
   /* 页面登录 */
@@ -39,12 +40,14 @@ const titleValue = typeLists[type] && typeLists[type].title;
   await page.type('#account', '2218823', { delay: 100 })
   const passwordInput = await page.$('.form-control[name="password"]')
   console.log(passwordInput)
-  await passwordInput.type('KYe@2188', { delay: 100 })
+  await passwordInput.type('Kye@2188', { delay: 100 })
   page.click('#submit')
 
   /* 等待跳转 */
   await page.waitForNavigation()
   // await page.goto('http://zentao.ky-tech.com.cn/my-task.html');
+  /* 重定向旧版 */
+  await page.goto('https://zentao.ky-tech.com.cn/my/')
 
   /* 后台页面首页 - 等待首页加载 */
   await page.waitForSelector('#subNavbar ul')
@@ -58,7 +61,8 @@ const titleValue = typeLists[type] && typeLists[type].title;
   } else {
     console.log('no task element')
   }
-  await page.waitForNavigation()
+  await page.waitForSelector('#mainContent')
+  // await page.waitForNavigation()
 
   const today = dayjs(help.getToDay()).format("MM-DD")
 

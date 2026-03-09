@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cd": "node ./cd-index.js"
+    "cd": "node ./cd-index.js",
+    "start": "node ./cd-multiple.js start",
+    "end": "node ./cd-multiple.js end"
   },
   "keywords": [],
   "author": "",

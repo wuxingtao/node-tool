@@ -1,7 +1,7 @@
 *#! /bin/bash
 
 # Go To Public folder
-cd D:/XINGTAO/project/node-tool/packages/puppeteer-kye
+cd D:/backup-2023-xingtao/XINGTAO/project/node-tool/packages/puppeteer-kye
 
 # Add changes to git.
 node ./cd-multiple end

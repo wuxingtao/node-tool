@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
   await page.goto('https://paas.ky-tech.com.cn/console/');
   console.log('start!', page.url());
   await page.type('#user','218823',{delay:100})
-  await page.type('#password','KYe@2188',{delay:100})
+  await page.type('#password','kye@2188',{delay:100})
    page.click('.login-btn')
   await page.waitForNavigation({waitUntil: 'load'});
   console.log('FOUND!', page.url());
